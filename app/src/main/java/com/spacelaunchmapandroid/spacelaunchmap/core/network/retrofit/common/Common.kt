@@ -4,7 +4,7 @@ import com.spacelaunchmapandroid.spacelaunchmap.core.network.retrofit.RetrofitCl
 import com.spacelaunchmapandroid.spacelaunchmap.core.network.retrofit.RetrofitServices
 
 object Common {
-    private const val BASE_URL = "https://www.nasa.gov/api/2/"
+    private const val BASE_URL = "https://www.nasa.gov/api/2/calendar-event/"
     val retrofitService: RetrofitServices =
         RetrofitClient.getClient(BASE_URL).create(RetrofitServices::class.java)
 }

@@ -1,9 +1,9 @@
 package com.spacelaunchmapandroid.spacelaunchmap.service.nasa.model.managed
 
-import com.spacelaunchmapandroid.spacelaunchmap.service.nasa.model.Hit
+import io.realm.RealmList
 import io.realm.RealmObject
 
-class HitsManaged : RealmObject() {
+open class HitsManaged : RealmObject() {
     var total: Int = 0
-    lateinit var hits: MutableList<Hit>
+    var hits: RealmList<HitManaged>? = null
 }

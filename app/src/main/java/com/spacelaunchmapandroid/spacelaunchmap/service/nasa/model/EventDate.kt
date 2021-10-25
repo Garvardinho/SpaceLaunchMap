@@ -8,5 +8,4 @@ data class EventDate(
     var rrule: String?,
     var timezone: String,
     var timezoneDB: String,
-    var dateType: DateType
 )
