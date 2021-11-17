@@ -1,0 +1,31 @@
+package com.spacelaunchmapandroid.spacelaunchmap.service.spacex.model
+
+data class SpaceXSchedule(
+    var fairings: Fairings,
+    var links: Links,
+    var static_fire_date_utc: String?,
+    var static_fire_date_unix: String?,
+    var net: Boolean,
+    var window: Long?,
+    var rocket: String?,
+    var success: Boolean?,
+    var failures: MutableList<Failure>,
+    var details: String?,
+    var crew: MutableList<String>,
+    var ships: MutableList<String>,
+    var capsules: MutableList<String>,
+    var payloads: MutableList<String>,
+    var launchpad: String?,
+    var flight_number: Int,
+    var name: String,
+    var date_utc: String,
+    var date_unix: Long,
+    var date_local: String,
+    var date_precision: String,
+    var upcoming: Boolean,
+    var cores: MutableList<Core>,
+    var auto_update: Boolean,
+    var tbd: Boolean,
+    var launch_library_id: String,
+    var id: String
+)
