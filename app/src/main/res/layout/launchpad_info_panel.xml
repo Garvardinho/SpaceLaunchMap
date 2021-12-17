@@ -2,15 +2,15 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/launchpad_info_panel"
-    android:layout_width="256dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:backgroundTint="#ffffff"
     app:cardCornerRadius="25dp">
 
     <LinearLayout
         android:id="@+id/launchpad_title_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical" />
 
 </androidx.cardview.widget.CardView>
