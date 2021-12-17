@@ -4,5 +4,5 @@ import com.yandex.mapkit.geometry.Point
 
 interface SLMapControllerOutput {
 
-    fun getLaunchpadCoordinates(): List<Point>
+    fun getLaunchpadCoordinates(): Map<String, Point>
 }

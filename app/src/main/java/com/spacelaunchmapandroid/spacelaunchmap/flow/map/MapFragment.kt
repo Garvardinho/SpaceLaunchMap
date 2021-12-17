@@ -1,12 +1,13 @@
 package com.spacelaunchmapandroid.spacelaunchmap.flow.map
 
-import android.graphics.Color
+import android.graphics.Paint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import com.spacelaunchmapandroid.spacelaunchmap.R
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
@@ -15,7 +16,6 @@ import com.yandex.mapkit.map.*
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.runtime.image.ImageProvider
 import com.yandex.runtime.ui_view.ViewProvider
-import org.w3c.dom.Text
 
 class MapFragment : Fragment(), SLMapView {
 
@@ -61,9 +61,31 @@ class MapFragment : Fragment(), SLMapView {
 
     override fun showPlaceMarks() {
         val launchpadCoordinates = presenter.getLaunchpadCoordinates()
+        val launchpadInfoPanel: CardView =
+            View.inflate(requireContext(), R.layout.launchpad_info_panel, null) as CardView
+
         for (point in launchpadCoordinates) {
-            mapView.map.mapObjects.addPlacemark(point).setIcon(ImageProvider.
-            fromResource(requireContext(), R.drawable.placemark))
+            val launchpadTitle = launchpadInfoPanel.findViewById<TextView>(R.id.launchpad_title)
+            launchpadTitle.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+            launchpadTitle.text = point.key
+
+            val placemark = mapView.map.mapObjects.addPlacemark(point.value, ImageProvider.
+                fromResource(requireContext(), R.drawable.placemark))
+            val infopanelMapObject = mapView.map.mapObjects.addPlacemark(point.value,
+                ViewProvider(launchpadInfoPanel))
+
+            infopanelMapObject.isVisible = false
+            placemark.addTapListener { _, _ ->
+                placemark.isVisible = false
+                infopanelMapObject.isVisible = true
+                false
+            }
+
+            infopanelMapObject.addTapListener { _, _ ->
+                placemark.isVisible = true
+                infopanelMapObject.isVisible = false
+                false
+            }
         }
     }
 }

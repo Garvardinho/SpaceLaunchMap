@@ -13,13 +13,13 @@ class Presenter(private val mapView: SLMapView) : SLMapControllerOutput {
     private var dataNasa: NasaSchedule? = null
     private var dataSpaceX: List<SpaceXSchedule>? = null
     private var dataSpaceXLaunchpad: List<SpaceXLaunchpad>? = null
-    private var coordinates: ArrayList<Point> = ArrayList()
+    private var coordinates: HashMap<String, Point> = HashMap()
 
     init {
         getData()
     }
 
-    override fun getLaunchpadCoordinates(): List<Point> {
+    override fun getLaunchpadCoordinates(): Map<String, Point> {
         return coordinates
     }
 
@@ -62,9 +62,9 @@ class Presenter(private val mapView: SLMapView) : SLMapControllerOutput {
                     dataSpaceXLaunchpad = response.body()
                     for (item in dataSpaceXLaunchpad!!) {
                         val point = Point(item.latitude, item.longitude)
-                        coordinates.add(point)
-                        mapView.showPlaceMarks()
+                        coordinates[item.name] = point
                     }
+                    mapView.showPlaceMarks()
                 }
 
                 override fun onFailure(call: Call<List<SpaceXLaunchpad>>, t: Throwable) {
