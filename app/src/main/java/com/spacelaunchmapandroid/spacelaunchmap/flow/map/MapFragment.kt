@@ -6,8 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.RecyclerView
 import com.spacelaunchmapandroid.spacelaunchmap.R
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
@@ -30,7 +32,8 @@ class MapFragment : Fragment(), SLMapView {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_map, container, false)
@@ -59,32 +62,42 @@ class MapFragment : Fragment(), SLMapView {
         MapKitFactory.getInstance().onStop()
     }
 
-    override fun showPlaceMarks() {
-        val launchpadCoordinates = presenter.getLaunchpadCoordinates()
-        val launchpadInfoPanel: CardView =
-            View.inflate(requireContext(), R.layout.launchpad_info_panel, null) as CardView
+    override fun showPlacemarks() {
+        val launchpadCoordinates: Map<Point, List<String>> = presenter.getLaunchpadCoordinates()
 
-        for (point in launchpadCoordinates) {
-            val launchpadTitle = launchpadInfoPanel.findViewById<TextView>(R.id.launchpad_title)
-            launchpadTitle.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-            launchpadTitle.text = point.key
+        for ((point, titles) in launchpadCoordinates) {
+            val launchpadInfoPanel: CardView =
+                View.inflate(requireContext(), R.layout.launchpad_info_panel, null) as CardView
+            val launchpadTitleListLayout: LinearLayout = launchpadInfoPanel.
+                findViewById(R.id.launchpad_title_list)
 
-            val placemark = mapView.map.mapObjects.addPlacemark(point.value, ImageProvider.
+            for (title in titles) {
+                val launchpadTitleList: TextView = View.inflate(
+                    requireContext(),
+                    R.layout.launchpad_title_text_view,
+                    null
+                ) as TextView
+                launchpadTitleList.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+                launchpadTitleList.text = title
+                launchpadTitleListLayout.addView(launchpadTitleList)
+            }
+
+            val placemark = mapView.map.mapObjects.addPlacemark(point, ImageProvider.
                 fromResource(requireContext(), R.drawable.placemark))
-            val infopanelMapObject = mapView.map.mapObjects.addPlacemark(point.value,
+            val infopanelMapObject = mapView.map.mapObjects.addPlacemark(point,
                 ViewProvider(launchpadInfoPanel))
 
             infopanelMapObject.isVisible = false
             placemark.addTapListener { _, _ ->
                 placemark.isVisible = false
                 infopanelMapObject.isVisible = true
-                false
+                true
             }
 
             infopanelMapObject.addTapListener { _, _ ->
                 placemark.isVisible = true
                 infopanelMapObject.isVisible = false
-                false
+                true
             }
         }
     }

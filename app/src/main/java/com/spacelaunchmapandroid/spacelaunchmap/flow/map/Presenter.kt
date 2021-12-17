@@ -13,13 +13,13 @@ class Presenter(private val mapView: SLMapView) : SLMapControllerOutput {
     private var dataNasa: NasaSchedule? = null
     private var dataSpaceX: List<SpaceXSchedule>? = null
     private var dataSpaceXLaunchpad: List<SpaceXLaunchpad>? = null
-    private var coordinates: HashMap<String, Point> = HashMap()
+    private var coordinates: HashMap<Point, ArrayList<String>> = HashMap()
 
     init {
         getData()
     }
 
-    override fun getLaunchpadCoordinates(): Map<String, Point> {
+    override fun getLaunchpadCoordinates(): Map<Point, List<String>> {
         return coordinates
     }
 
@@ -60,16 +60,32 @@ class Presenter(private val mapView: SLMapView) : SLMapControllerOutput {
                     response: Response<List<SpaceXLaunchpad>>
                 ) {
                     dataSpaceXLaunchpad = response.body()
-                    for (item in dataSpaceXLaunchpad!!) {
-                        val point = Point(item.latitude, item.longitude)
-                        coordinates[item.name] = point
-                    }
-                    mapView.showPlaceMarks()
+                    notifyMapToShowPlacemarks(dataSpaceXLaunchpad)
                 }
 
                 override fun onFailure(call: Call<List<SpaceXLaunchpad>>, t: Throwable) {
                     t.printStackTrace()
                 }
             })
+    }
+
+    private fun notifyMapToShowPlacemarks(dataSpaceXLaunchpad: List<SpaceXLaunchpad>?) {
+
+        for (item in dataSpaceXLaunchpad!!) {
+            var isNew = true
+            for ((point, _) in coordinates) {
+                if (item.latitude == point.latitude && item.longitude == point.longitude) {
+                    coordinates[point]!!.add(item.name)
+                    isNew = false
+                }
+            }
+
+            if (isNew) {
+                val point = Point(item.latitude, item.longitude)
+                coordinates[point] = ArrayList()
+                coordinates[point]!!.add(item.name)
+            }
+        }
+        mapView.showPlacemarks()
     }
 }
