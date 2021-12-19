@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.recyclerview.widget.RecyclerView
 import com.spacelaunchmapandroid.spacelaunchmap.R
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
@@ -29,7 +28,7 @@ class MapFragment : Fragment(), SLMapView {
         super.onCreate(savedInstanceState)
         MapKitFactory.setApiKey("ef270c17-6822-47e6-899a-58269d47526b")
         MapKitFactory.initialize(requireContext())
-        presenter = Presenter(this)
+        presenter = MapPresenter(this)
     }
 
     override fun onCreateView(

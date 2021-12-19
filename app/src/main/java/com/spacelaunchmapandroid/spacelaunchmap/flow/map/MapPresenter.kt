@@ -1,19 +1,21 @@
 package com.spacelaunchmapandroid.spacelaunchmap.flow.map
 
+import com.spacelaunchmapandroid.spacelaunchmap.MainActivity
 import com.spacelaunchmapandroid.spacelaunchmap.core.network.retrofit.common.Common
 import com.spacelaunchmapandroid.spacelaunchmap.service.nasa.model.NasaSchedule
 import com.spacelaunchmapandroid.spacelaunchmap.service.spacex.model.SpaceXLaunchpad
 import com.spacelaunchmapandroid.spacelaunchmap.service.spacex.model.SpaceXSchedule
+import com.spacelaunchmapandroid.spacelaunchmap.service.spacex.model.managed.SpaceXLaunchpadManaged
 import com.yandex.mapkit.geometry.Point
+import io.realm.Realm
 import retrofit2.Call
 import retrofit2.Response
 
-class Presenter(private val mapView: SLMapView) : SLMapControllerOutput {
+class MapPresenter(private val mapView: SLMapView) : SLMapControllerOutput {
 
-    private var dataNasa: NasaSchedule? = null
-    private var dataSpaceX: List<SpaceXSchedule>? = null
     private var dataSpaceXLaunchpad: List<SpaceXLaunchpad>? = null
     private var coordinates: HashMap<Point, ArrayList<String>> = HashMap()
+    private var realm: Realm = MainActivity.getRealmInstance()
 
     init {
         getData()
@@ -24,34 +26,6 @@ class Presenter(private val mapView: SLMapView) : SLMapControllerOutput {
     }
 
     private fun getData() {
-        val serviceNasa = Common.retrofitServiceNasa
-        serviceNasa.getEventList().enqueue(object : retrofit2.Callback<NasaSchedule> {
-            override fun onResponse(
-                call: Call<NasaSchedule>,
-                response: Response<NasaSchedule>
-            ) {
-                dataNasa = response.body()
-            }
-
-            override fun onFailure(call: Call<NasaSchedule>, t: Throwable) {
-                t.printStackTrace()
-            }
-        })
-
-        val serviceSpaceX = Common.retrofitServicesSpaceX
-        serviceSpaceX.getEventList().enqueue(object : retrofit2.Callback<List<SpaceXSchedule>> {
-            override fun onResponse(
-                call: Call<List<SpaceXSchedule>>,
-                response: Response<List<SpaceXSchedule>>
-            ) {
-                dataSpaceX = response.body()
-            }
-
-            override fun onFailure(call: Call<List<SpaceXSchedule>>, t: Throwable) {
-                t.printStackTrace()
-            }
-        })
-
         val serviceSpaceXLaunchpad = Common.retrofitServicesSpaceXLaunchpad
         serviceSpaceXLaunchpad.getLaunchpadList()
             .enqueue(object : retrofit2.Callback<List<SpaceXLaunchpad>> {
@@ -60,6 +34,7 @@ class Presenter(private val mapView: SLMapView) : SLMapControllerOutput {
                     response: Response<List<SpaceXLaunchpad>>
                 ) {
                     dataSpaceXLaunchpad = response.body()
+                    saveIntoRealm(dataSpaceXLaunchpad)
                     notifyMapToShowPlacemarks(dataSpaceXLaunchpad)
                 }
 
@@ -69,8 +44,24 @@ class Presenter(private val mapView: SLMapView) : SLMapControllerOutput {
             })
     }
 
-    private fun notifyMapToShowPlacemarks(dataSpaceXLaunchpad: List<SpaceXLaunchpad>?) {
+    private fun saveIntoRealm(dataSpaceXLaunchpad: List<SpaceXLaunchpad>?) {
+        for (launchpad in dataSpaceXLaunchpad!!) {
+            val spaceXLaunchpadManaged = SpaceXLaunchpadManaged(
+                launchpad.id,
+                launchpad.name,
+                launchpad.locality,
+                launchpad.region,
+                launchpad.latitude,
+                launchpad.longitude
+            )
 
+            realm.executeTransaction { transaction ->
+                transaction.insert(spaceXLaunchpadManaged)
+            }
+        }
+    }
+
+    private fun notifyMapToShowPlacemarks(dataSpaceXLaunchpad: List<SpaceXLaunchpad>?) {
         for (item in dataSpaceXLaunchpad!!) {
             var isNew = true
             for ((point, _) in coordinates) {
