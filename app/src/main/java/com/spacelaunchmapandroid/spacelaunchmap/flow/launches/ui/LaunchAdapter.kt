@@ -3,7 +3,6 @@ package com.spacelaunchmapandroid.spacelaunchmap.flow.launches.ui
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.spacelaunchmapandroid.spacelaunchmap.R
@@ -34,7 +33,7 @@ class LaunchAdapter(private val launchList: LaunchListSource) :
     }
 
     interface OnItemClickListener {
-        fun OnItemClick(v: View, position: Int)
+        fun onItemClick(v: View, position: Int)
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -45,7 +44,7 @@ class LaunchAdapter(private val launchList: LaunchListSource) :
         init {
             itemView.setOnClickListener { v ->
                 if (itemClickListener != null) {
-                    itemClickListener!!.OnItemClick(v, bindingAdapterPosition)
+                    itemClickListener!!.onItemClick(v, bindingAdapterPosition)
                 }
             }
         }

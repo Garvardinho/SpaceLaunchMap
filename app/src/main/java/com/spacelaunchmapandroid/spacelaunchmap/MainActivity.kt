@@ -3,6 +3,7 @@ package com.spacelaunchmapandroid.spacelaunchmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE
+import com.spacelaunchmapandroid.spacelaunchmap.flow.launches.ui.LaunchesFragment
 import com.spacelaunchmapandroid.spacelaunchmap.flow.map.MapFragment
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -23,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         )
         setContentView(R.layout.activity_main)
         supportFragmentManager.beginTransaction()
-            .replace(R.id.main_fragment, MapFragment())
+            .replace(R.id.main_fragment, LaunchesFragment())
             .addToBackStack(null)
             .setTransition(TRANSIT_FRAGMENT_FADE)
             .commit()

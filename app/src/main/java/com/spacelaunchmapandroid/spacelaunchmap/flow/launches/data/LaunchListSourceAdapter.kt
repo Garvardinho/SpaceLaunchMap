@@ -1,8 +1,9 @@
 package com.spacelaunchmapandroid.spacelaunchmap.flow.launches.data
 
-class LaunchListSourceAdapter : LaunchListSource {
 
-    private val presenter: SLLaunchesControllerOutput = LaunchesPresenter()
+class LaunchListSourceAdapter(launchesFragment: SLLaunchesFragment) : LaunchListSource {
+
+    private val presenter: SLLaunchesControllerOutput = LaunchesPresenter(launchesFragment)
     private val dataSource: ArrayList<Launch> = presenter.getLaunchesInfo()
 
     override fun getCardData(position: Int): Launch {

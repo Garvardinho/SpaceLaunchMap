@@ -10,13 +10,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.spacelaunchmapandroid.spacelaunchmap.R
 import com.spacelaunchmapandroid.spacelaunchmap.flow.launches.data.LaunchListSource
 import com.spacelaunchmapandroid.spacelaunchmap.flow.launches.data.LaunchListSourceAdapter
+import com.spacelaunchmapandroid.spacelaunchmap.flow.launches.data.SLLaunchesFragment
 
 private const val LAUNCHPAD_TITLE = "LaunchesFragment.launchpadTitle"
 
-class LaunchesFragment : Fragment() {
+class LaunchesFragment : Fragment(), SLLaunchesFragment {
 
     private var launchpadTitleToSort: String? = null
     private lateinit var recyclerView: RecyclerView
+    val data: LaunchListSource = LaunchListSourceAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,12 +33,10 @@ class LaunchesFragment : Fragment() {
     ): View {
         val view: View = inflater.inflate(R.layout.fragment_launches, container, false)
         recyclerView = view.findViewById(R.id.launches)
-        initList()
         return view
     }
 
-    private fun initList() {
-        val data: LaunchListSource = LaunchListSourceAdapter()
+    override fun initList() {
         val layoutManager = LinearLayoutManager(context)
         val adapter = LaunchAdapter(data)
 
@@ -45,7 +45,7 @@ class LaunchesFragment : Fragment() {
         recyclerView.adapter = adapter
 
         adapter.setOnItemClickListener(object : LaunchAdapter.OnItemClickListener {
-            override fun OnItemClick(v: View, position: Int) {
+            override fun onItemClick(v: View, position: Int) {
                 TODO("Not yet implemented")
             }
         })

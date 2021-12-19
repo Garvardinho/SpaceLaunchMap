@@ -1,19 +1,17 @@
 package com.spacelaunchmapandroid.spacelaunchmap.flow.launches.data
 
-import com.spacelaunchmapandroid.spacelaunchmap.MainActivity
 import com.spacelaunchmapandroid.spacelaunchmap.core.network.retrofit.common.Common
 import com.spacelaunchmapandroid.spacelaunchmap.service.nasa.model.NasaSchedule
 import com.spacelaunchmapandroid.spacelaunchmap.service.spacex.model.SpaceXSchedule
-import io.realm.Realm
 import retrofit2.Call
 import retrofit2.Response
 
-class LaunchesPresenter : SLLaunchesControllerOutput {
+class LaunchesPresenter(private val launchesFragment: SLLaunchesFragment)
+    : SLLaunchesControllerOutput {
 
     private var dataNasa: NasaSchedule? = null
     private var dataSpaceX: List<SpaceXSchedule>? = null
     private var launches: ArrayList<Launch> = ArrayList()
-    private var realm: Realm = MainActivity.getRealmInstance()
 
     override fun getLaunchesInfo(): ArrayList<Launch> {
         val serviceNasa = Common.retrofitServiceNasa
@@ -43,9 +41,10 @@ class LaunchesPresenter : SLLaunchesControllerOutput {
                         launchSpaceX.name,
                         launchSpaceX.date_local,
                         "SpaceX"
-                    )
+                        )
                     )
                 }
+                launchesFragment.initList()
             }
 
             override fun onFailure(call: Call<List<SpaceXSchedule>>, t: Throwable) {
