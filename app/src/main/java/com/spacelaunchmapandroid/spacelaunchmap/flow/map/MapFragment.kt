@@ -26,7 +26,6 @@ class MapFragment : Fragment(), SLMapView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MapKitFactory.setApiKey("ef270c17-6822-47e6-899a-58269d47526b")
         MapKitFactory.initialize(requireContext())
         presenter = MapPresenter(this)
     }
