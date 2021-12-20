@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.spacelaunchmapandroid.spacelaunchmap.R
@@ -12,20 +13,10 @@ import com.spacelaunchmapandroid.spacelaunchmap.flow.launches.data.LaunchListSou
 import com.spacelaunchmapandroid.spacelaunchmap.flow.launches.data.LaunchListSourceAdapter
 import com.spacelaunchmapandroid.spacelaunchmap.flow.launches.data.SLLaunchesFragment
 
-private const val LAUNCHPAD_TITLE = "LaunchesFragment.launchpadTitle"
-
 class LaunchesFragment : Fragment(), SLLaunchesFragment {
 
-    private var launchpadTitleToSort: String? = null
     private lateinit var recyclerView: RecyclerView
     val data: LaunchListSource = LaunchListSourceAdapter(this)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            launchpadTitleToSort = it.getString(LAUNCHPAD_TITLE)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +24,8 @@ class LaunchesFragment : Fragment(), SLLaunchesFragment {
     ): View {
         val view: View = inflater.inflate(R.layout.fragment_launches, container, false)
         recyclerView = view.findViewById(R.id.launches)
+
+        initList()
         return view
     }
 
@@ -44,20 +37,21 @@ class LaunchesFragment : Fragment(), SLLaunchesFragment {
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
 
-        adapter.setOnItemClickListener(object : LaunchAdapter.OnItemClickListener {
-            override fun onItemClick(v: View, position: Int) {
-                TODO("Not yet implemented")
+        adapter.setOnItemClickListener(object : LaunchAdapter.OnMoreInfoButtonClickListener {
+            override fun onMoreInfoButtonClick(v: View, position: Int) {
+                openDetailsFragment(data.getCardData(position).title)
             }
         })
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(launchpadTitleToSort: String) =
-            LaunchesFragment().apply {
-                arguments = Bundle().apply {
-                    putString(LAUNCHPAD_TITLE, launchpadTitleToSort)
-                }
-            }
+    private fun openDetailsFragment(launchTitle: String) {
+        requireActivity().supportFragmentManager
+            .beginTransaction()
+            .replace(
+                R.id.main_fragment,
+                LaunchDetailsFragment.newInstance(launchTitle))
+            .addToBackStack(null)
+            .setTransition(TRANSIT_FRAGMENT_FADE)
+            .commit()
     }
 }

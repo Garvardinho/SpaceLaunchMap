@@ -43,7 +43,7 @@ class MapFragment : Fragment(), SLMapView {
 
         mapView = view.findViewById(R.id.map_view)
         mapView.map.move(
-            CameraPosition(Point(28.396837, -80.605659), 11.0f, 0.0f, 0.0f),
+            CameraPosition(Point(41.850033, -87.6500523), 4.0f, 0.0f, 0.0f),
             Animation(Animation.Type.SMOOTH, 0f),
             null
         )

@@ -5,6 +5,6 @@ import retrofit2.Call
 import retrofit2.http.GET
 
 interface RetrofitServicesSpaceXLaunchpad {
-    @GET("landpads")
+    @GET("launchpads")
     fun getLaunchpadList(): Call<List<SpaceXLaunchpad>>
 }

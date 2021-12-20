@@ -3,6 +3,7 @@ package com.spacelaunchmapandroid.spacelaunchmap.flow.launches.ui
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.spacelaunchmapandroid.spacelaunchmap.R
@@ -12,7 +13,7 @@ import com.spacelaunchmapandroid.spacelaunchmap.flow.launches.data.LaunchListSou
 class LaunchAdapter(private val launchList: LaunchListSource) :
     RecyclerView.Adapter<LaunchAdapter.ViewHolder>() {
 
-    private var itemClickListener: OnItemClickListener? = null
+    private var onMoreInfoButtonClickListener: OnMoreInfoButtonClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v: View =
@@ -28,31 +29,34 @@ class LaunchAdapter(private val launchList: LaunchListSource) :
         return launchList.getSize()
     }
 
-    fun setOnItemClickListener(itemClickListener: OnItemClickListener) {
-        this.itemClickListener = itemClickListener
+    fun setOnItemClickListener(onMoreInfoButtonClickListener: OnMoreInfoButtonClickListener) {
+        this.onMoreInfoButtonClickListener = onMoreInfoButtonClickListener
     }
 
-    interface OnItemClickListener {
-        fun onItemClick(v: View, position: Int)
+    interface OnMoreInfoButtonClickListener {
+        fun onMoreInfoButtonClick(v: View, position: Int)
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val launchTitle: TextView = itemView.findViewById(R.id.launch_title)
         private val launchDate: TextView = itemView.findViewById(R.id.launch_date)
+        private val launchLocation: TextView = itemView.findViewById(R.id.launch_location)
         private val launchCompany: TextView = itemView.findViewById(R.id.launch_company)
-
-        init {
-            itemView.setOnClickListener { v ->
-                if (itemClickListener != null) {
-                    itemClickListener!!.onItemClick(v, bindingAdapterPosition)
-                }
-            }
-        }
+        private val launchMoreInfoButton: ImageButton = itemView.findViewById(R.id.launch_more_info_button)
 
         fun setData(launch: Launch) {
             launchTitle.text = launch.title
             launchDate.text = launch.date.subSequence(0, 10)
+            launchLocation.text = launch.location
             launchCompany.text = launch.company
+        }
+
+        init {
+            launchMoreInfoButton.setOnClickListener { v ->
+                if (onMoreInfoButtonClickListener != null) {
+                    onMoreInfoButtonClickListener!!.onMoreInfoButtonClick(v, bindingAdapterPosition)
+                }
+            }
         }
     }
 
