@@ -7,8 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.Button
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import com.spacelaunchmapandroid.spacelaunchmap.R
 import com.yandex.mapkit.Animation
@@ -62,30 +62,21 @@ class MapFragment : Fragment(), SLMapView {
     }
 
     override fun showPlacemarks() {
-        val launchpadCoordinates: Map<Point, List<String>> = presenter.getLaunchpadCoordinates()
+        val launchpadCoordinates: Map<String, Point> = presenter.getLaunchpadCoordinates()
 
-        for ((point, titles) in launchpadCoordinates) {
+        for ((title, point) in launchpadCoordinates) {
             val launchpadInfoPanel: CardView =
                 View.inflate(requireContext(), R.layout.launchpad_info_panel, null) as CardView
-            val launchpadTitleListLayout: LinearLayout = launchpadInfoPanel.
-                findViewById(R.id.launchpad_title_list)
 
-            for (title in titles) {
-                val launchpadTitleList: TextView = View.inflate(
-                    requireContext(),
-                    R.layout.launchpad_title_text_view,
-                    null
-                ) as TextView
-                launchpadTitleList.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-                launchpadTitleList.text = title
-                launchpadTitleList.width = 256
-                launchpadTitleList.height = 128
-                launchpadTitleList.gravity = Gravity.CENTER
-                launchpadTitleListLayout.addView(launchpadTitleList)
+            val launchpadTitle: Button = launchpadInfoPanel.findViewById(R.id.launchpad_title)
+            launchpadTitle.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+            launchpadTitle.text = title
+            launchpadTitle.setOnClickListener {
+                Toast.makeText(context, "haha", Toast.LENGTH_SHORT).show()
             }
 
             val placemark = mapView.map.mapObjects.addPlacemark(point, ImageProvider.
-                fromResource(requireContext(), R.drawable.placemark))
+                fromResource(requireContext(), R.drawable.map_pin))
             val infopanelMapObject = mapView.map.mapObjects.addPlacemark(point,
                 ViewProvider(launchpadInfoPanel))
 
@@ -96,11 +87,11 @@ class MapFragment : Fragment(), SLMapView {
                 true
             }
 
-            infopanelMapObject.addTapListener { _, _ ->
-                placemark.isVisible = true
-                infopanelMapObject.isVisible = false
-                true
-            }
+//            infopanelMapObject.addTapListener { _, _ ->
+//                placemark.isVisible = true
+//                infopanelMapObject.isVisible = false
+//                true
+//            }
         }
     }
 }
