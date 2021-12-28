@@ -7,10 +7,14 @@
     android:backgroundTint="#ffffff"
     app:cardCornerRadius="25dp">
 
-    <LinearLayout
-        android:id="@+id/launchpad_title_list"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/launchpad_title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" />
+        android:layout_gravity="center"
+        android:layout_margin="24dp"
+        android:textAlignment="center"
+        android:textColor="@color/purple_700"
+        android:textSize="20sp" />
 
 </androidx.cardview.widget.CardView>
