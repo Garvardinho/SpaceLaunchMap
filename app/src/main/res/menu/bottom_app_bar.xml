@@ -8,7 +8,7 @@
 
     <item
         android:id="@+id/launches_screen"
-        android:icon="@drawable/ic_rocket"
+        android:icon="@drawable/ic_clipboard_list"
         android:enabled="true"
         android:title="@string/launches" />
 

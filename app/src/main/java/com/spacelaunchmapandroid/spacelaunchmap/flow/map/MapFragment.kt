@@ -2,7 +2,6 @@ package com.spacelaunchmapandroid.spacelaunchmap.flow.map
 
 import android.graphics.Paint
 import android.os.Bundle
-import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -76,7 +75,7 @@ class MapFragment : Fragment(), SLMapView {
             }
 
             val placemark = mapView.map.mapObjects.addPlacemark(point, ImageProvider.
-                fromResource(requireContext(), R.drawable.map_pin))
+                fromResource(requireContext(), R.drawable.rocket))
             val infopanelMapObject = mapView.map.mapObjects.addPlacemark(point,
                 ViewProvider(launchpadInfoPanel))
 
@@ -87,11 +86,11 @@ class MapFragment : Fragment(), SLMapView {
                 true
             }
 
-//            infopanelMapObject.addTapListener { _, _ ->
-//                placemark.isVisible = true
-//                infopanelMapObject.isVisible = false
-//                true
-//            }
+            infopanelMapObject.addTapListener { _, _ ->
+                placemark.isVisible = true
+                infopanelMapObject.isVisible = false
+                true
+            }
         }
     }
 }

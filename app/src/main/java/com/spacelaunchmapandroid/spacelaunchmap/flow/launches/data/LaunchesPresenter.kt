@@ -52,7 +52,8 @@ class LaunchesPresenter(private val launchesFragment: SLLaunchesFragment)
                             launchSpaceX.name,
                             launchSpaceX.date_local,
                             "${launchpad?.locality}, ${launchpad?.region}",
-                            "SpaceX"
+                            "SpaceX",
+                            launchpad?.id!!
                         )
                     )
                 }
@@ -63,7 +64,6 @@ class LaunchesPresenter(private val launchesFragment: SLLaunchesFragment)
                 t.printStackTrace()
             }
         })
-
         return launches
     }
 

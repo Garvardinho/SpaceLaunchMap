@@ -22,8 +22,20 @@
             android:layout_marginBottom="16dp"
             android:textAppearance="?attr/textAppearanceHeadline4"
             android:textColor="?colorOnSecondary"
-            app:layout_constraintBottom_toTopOf="@+id/launch_date"
+            app:layout_constraintBottom_toTopOf="@+id/launch_launchpad"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/launch_launchpad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="64dp"
+            android:layout_marginBottom="8dp"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="?android:attr/textColorSecondary"
+            app:layout_constraintBottom_toTopOf="@+id/launch_date" />
 
         <TextView
             android:id="@+id/launch_date"
@@ -61,7 +73,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/launch_company"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/launch_date"
-            app:layout_constraintTop_toTopOf="@id/launch_date" />
+            app:layout_constraintTop_toTopOf="@id/launch_launchpad" />
 
         <TextView
             android:id="@+id/launch_location"

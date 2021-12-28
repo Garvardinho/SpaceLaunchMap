@@ -1,6 +1,8 @@
 package com.spacelaunchmapandroid.spacelaunchmap.flow.launches.ui
 
 import android.os.Bundle
+import android.text.Html
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,6 +42,7 @@ class LaunchDetailsFragment : Fragment() {
         val launchTitleTextView: TextView = view.findViewById(R.id.launch_title)
         val launchDate: TextView = view.findViewById(R.id.launch_date)
         val launchCompany: TextView = view.findViewById(R.id.launch_company)
+        val launchLaunchpad: TextView = view.findViewById(R.id.launch_launchpad)
         val launchLocation: TextView = view.findViewById(R.id.launch_location)
         val launchDetails: TextView = view.findViewById(R.id.launch_details)
 
@@ -48,12 +51,13 @@ class LaunchDetailsFragment : Fragment() {
         launchCompany.text = getString(R.string.spacex)
         val launchpad = MainActivity.getRealmInstance()
             .where<SpaceXLaunchpadManaged>().equalTo("id", launch?.launchpad).findFirst()
-        launchLocation.text = getString(R.string.location, launchpad?.locality, launchpad?.locality)
+        launchLocation.text = getString(R.string.location, launchpad?.locality, launchpad?.region)
+        launchLaunchpad.text = getString(R.string.launchpad, launchpad?.name)
 
         if (launch?.details != null)
             launchDetails.text = getString(R.string.details, launch?.details)
         else
-            launchDetails.text = getString(R.string.details, "none")
+            launchDetails.text = getString(R.string.details, "No details available yet.")
 
     }
 
