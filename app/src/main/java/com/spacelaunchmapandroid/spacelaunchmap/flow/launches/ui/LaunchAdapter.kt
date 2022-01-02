@@ -6,12 +6,10 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.spacelaunchmapandroid.spacelaunchmap.MainActivity
 import com.spacelaunchmapandroid.spacelaunchmap.R
+import com.spacelaunchmapandroid.spacelaunchmap.core.database.SLRealm
 import com.spacelaunchmapandroid.spacelaunchmap.flow.launches.data.Launch
 import com.spacelaunchmapandroid.spacelaunchmap.flow.launches.data.LaunchListSource
-import com.spacelaunchmapandroid.spacelaunchmap.service.spacex.model.managed.SpaceXLaunchpadManaged
-import io.realm.kotlin.where
 
 class LaunchAdapter(private val launchList: LaunchListSource) :
     RecyclerView.Adapter<LaunchAdapter.ViewHolder>() {
@@ -49,8 +47,7 @@ class LaunchAdapter(private val launchList: LaunchListSource) :
         private val launchMoreInfoButton: ImageButton = itemView.findViewById(R.id.launch_more_info_button)
 
         fun setData(launch: Launch) {
-            val launchpad = MainActivity.getRealmInstance()
-                .where<SpaceXLaunchpadManaged>().equalTo("id", launch.launchpad).findFirst()
+            val launchpad = SLRealm.findSpaceXLaunchpadByID(launch.launchpad)
             launchTitle.text = launch.title
             launchDate.text = launch.date.subSequence(0, 10)
             launchLaunchpad.text = launchpad?.name

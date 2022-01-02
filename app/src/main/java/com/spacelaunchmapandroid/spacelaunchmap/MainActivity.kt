@@ -3,7 +3,6 @@ package com.spacelaunchmapandroid.spacelaunchmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationBarView
 import com.spacelaunchmapandroid.spacelaunchmap.flow.launches.ui.LaunchesFragment
 import com.spacelaunchmapandroid.spacelaunchmap.flow.map.MapFragment
@@ -12,12 +11,6 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 
 class MainActivity : AppCompatActivity() {
-
-    companion object {
-        fun getRealmInstance(): Realm {
-            return Realm.getDefaultInstance()
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

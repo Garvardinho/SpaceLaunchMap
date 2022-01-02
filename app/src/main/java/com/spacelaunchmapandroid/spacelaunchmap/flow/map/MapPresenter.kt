@@ -1,10 +1,8 @@
 package com.spacelaunchmapandroid.spacelaunchmap.flow.map
 
-import com.spacelaunchmapandroid.spacelaunchmap.MainActivity
+import com.spacelaunchmapandroid.spacelaunchmap.core.database.SLRealm
 import com.spacelaunchmapandroid.spacelaunchmap.core.network.retrofit.common.Common
-import com.spacelaunchmapandroid.spacelaunchmap.service.nasa.model.NasaSchedule
 import com.spacelaunchmapandroid.spacelaunchmap.service.spacex.model.SpaceXLaunchpad
-import com.spacelaunchmapandroid.spacelaunchmap.service.spacex.model.SpaceXSchedule
 import com.spacelaunchmapandroid.spacelaunchmap.service.spacex.model.managed.SpaceXLaunchpadManaged
 import com.yandex.mapkit.geometry.Point
 import io.realm.Realm
@@ -15,7 +13,6 @@ class MapPresenter(private val mapView: SLMapView) : SLMapControllerOutput {
 
     private var dataSpaceXLaunchpad: List<SpaceXLaunchpad>? = null
     private var coordinates: HashMap<String, Point> = HashMap()
-    private var realm: Realm = MainActivity.getRealmInstance()
 
     init {
         getData()
@@ -34,7 +31,7 @@ class MapPresenter(private val mapView: SLMapView) : SLMapControllerOutput {
                     response: Response<List<SpaceXLaunchpad>>
                 ) {
                     dataSpaceXLaunchpad = response.body()
-                    saveIntoRealm(dataSpaceXLaunchpad)
+                    SLRealm.saveSpaceXLaunchpadsInRealm(dataSpaceXLaunchpad)
                     notifyMapToShowPlacemarks(dataSpaceXLaunchpad)
                 }
 
@@ -42,23 +39,6 @@ class MapPresenter(private val mapView: SLMapView) : SLMapControllerOutput {
                     t.printStackTrace()
                 }
             })
-    }
-
-    private fun saveIntoRealm(dataSpaceXLaunchpad: List<SpaceXLaunchpad>?) {
-        for (launchpad in dataSpaceXLaunchpad!!) {
-            val spaceXLaunchpadManaged = SpaceXLaunchpadManaged(
-                launchpad.id,
-                launchpad.name,
-                launchpad.locality,
-                launchpad.region,
-                launchpad.latitude,
-                launchpad.longitude
-            )
-
-            realm.executeTransaction { transaction ->
-                transaction.insert(spaceXLaunchpadManaged)
-            }
-        }
     }
 
     private fun notifyMapToShowPlacemarks(dataSpaceXLaunchpad: List<SpaceXLaunchpad>?) {
