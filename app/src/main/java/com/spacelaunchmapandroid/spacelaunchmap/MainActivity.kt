@@ -2,41 +2,57 @@ package com.spacelaunchmapandroid.spacelaunchmap
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.spacelaunchmapandroid.spacelaunchmap.core.network.retrofit.common.Common
-import com.spacelaunchmapandroid.spacelaunchmap.service.nasa.model.NasaSchedule
-import com.spacelaunchmapandroid.spacelaunchmap.service.spacex.model.SpaceXSchedule
-import retrofit2.Call
-import retrofit2.Response
+import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE
+import com.google.android.material.navigation.NavigationBarView
+import com.spacelaunchmapandroid.spacelaunchmap.flow.launches.ui.LaunchesFragment
+import com.spacelaunchmapandroid.spacelaunchmap.flow.map.MapFragment
+import com.yandex.mapkit.MapKitFactory
+import io.realm.Realm
+import io.realm.RealmConfiguration
 
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MapKitFactory.setApiKey("ef270c17-6822-47e6-899a-58269d47526b")
+        Realm.init(this)
+        Realm.setDefaultConfiguration(
+            RealmConfiguration.Builder().allowWritesOnUiThread(true).build()
+        )
         setContentView(R.layout.activity_main)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_fragment, MapFragment())
+            .addToBackStack(null)
+            .setTransition(TRANSIT_FRAGMENT_FADE)
+            .commit()
 
-        val serviceNasa = Common.retrofitServiceNasa
-        serviceNasa.getEventList().enqueue(object : retrofit2.Callback<NasaSchedule> {
-            override fun onResponse(call: Call<NasaSchedule>, response: Response<NasaSchedule>) {
-                var body = response.body()
+        initBottomNavigation()
+    }
+
+    private fun initBottomNavigation() {
+        val bottomNavigationView: NavigationBarView = findViewById(R.id.bottom_navigation)
+        bottomNavigationView.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.map_screen -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.main_fragment, MapFragment())
+                        .addToBackStack(null)
+                        .setTransition(TRANSIT_FRAGMENT_FADE)
+                        .commit()
+                    return@setOnItemSelectedListener true
+                }
+
+                R.id.launches_screen -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.main_fragment, LaunchesFragment())
+                        .addToBackStack(null)
+                        .setTransition(TRANSIT_FRAGMENT_FADE)
+                        .commit()
+                    return@setOnItemSelectedListener true
+                }
             }
 
-            override fun onFailure(call: Call<NasaSchedule>, t: Throwable) {
-
-            }
-        })
-
-        val serviceSpaceX = Common.retrofitServicesSpaceX
-        serviceSpaceX.getEventList().enqueue(object : retrofit2.Callback<List<SpaceXSchedule>> {
-            override fun onResponse(
-                call: Call<List<SpaceXSchedule>>,
-                response: Response<List<SpaceXSchedule>>
-            ) {
-                var body = response.body()
-            }
-
-            override fun onFailure(call: Call<List<SpaceXSchedule>>, t: Throwable) {
-                t.printStackTrace()
-            }
-
-        })
+            false
+        }
     }
 }

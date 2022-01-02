@@ -1,7 +1,14 @@
 package com.spacelaunchmapandroid.spacelaunchmap.service.nasa.model
 
+import com.google.gson.annotations.SerializedName
+
 data class Hit(
-    var _index: String,
-    var _id: String,
-    var _source: Source
+    @SerializedName("_index")
+    var index: String,
+
+    @SerializedName("_id")
+    var id: String,
+
+    @SerializedName("_source")
+    var source: Source
 )
