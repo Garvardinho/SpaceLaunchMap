@@ -25,7 +25,7 @@ object SLRealm {
             )
 
             realm.executeTransaction { transaction ->
-                transaction.insert(spaceXLaunchpadManaged)
+                transaction.insertOrUpdate(spaceXLaunchpadManaged)
             }
         }
     }
@@ -33,6 +33,7 @@ object SLRealm {
     fun saveSpaceXLaunchesInRealm(dataSpaceX: List<SpaceXSchedule>?) {
         for (launch in dataSpaceX!!) {
             val spaceXScheduleManaged = SpaceXScheduleManaged(
+                launch.name,
                 LinksManaged(
                     RedditManaged(
                         launch.links.reddit.campaign,
@@ -45,13 +46,12 @@ object SLRealm {
                     launch.links.wikipedia
                 ),
                 launch.launchpad,
-                launch.name,
                 launch.details,
                 launch.date_local
             )
 
             realm.executeTransaction { transaction ->
-                transaction.insert(spaceXScheduleManaged)
+                transaction.insertOrUpdate(spaceXScheduleManaged)
             }
         }
     }

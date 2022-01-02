@@ -4,14 +4,15 @@ import com.spacelaunchmapandroid.spacelaunchmap.core.database.SLRealm
 import com.spacelaunchmapandroid.spacelaunchmap.core.network.retrofit.common.Common
 import com.spacelaunchmapandroid.spacelaunchmap.service.nasa.model.NasaSchedule
 import com.spacelaunchmapandroid.spacelaunchmap.service.spacex.model.SpaceXSchedule
-import com.spacelaunchmapandroid.spacelaunchmap.service.spacex.model.managed.SpaceXLaunchpadManaged
-import io.realm.Realm
-import io.realm.kotlin.where
 import retrofit2.Call
 import retrofit2.Response
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
-class LaunchesPresenter(private val launchesFragment: SLLaunchesFragment)
-    : SLLaunchesControllerOutput {
+class LaunchesPresenter(private val launchesFragment: SLLaunchesFragment) :
+    SLLaunchesControllerOutput {
 
     private var dataNasa: NasaSchedule? = null
     private var dataSpaceX: List<SpaceXSchedule>? = null
@@ -53,17 +54,32 @@ class LaunchesPresenter(private val launchesFragment: SLLaunchesFragment)
 
     private fun initLaunchList(dataSpaceX: List<SpaceXSchedule>?) {
         for (launchSpaceX in dataSpaceX!!) {
-            val launchpad = Realm.getDefaultInstance().where<SpaceXLaunchpadManaged>()
-                .equalTo("id", launchSpaceX.launchpad).findFirst()
-            launches.add(
-                Launch(
-                    launchSpaceX.name,
-                    launchSpaceX.date_local,
-                    "${launchpad?.locality}, ${launchpad?.region}",
-                    "SpaceX",
-                    launchpad?.id!!
+            if (isDataCorrect(launchSpaceX)) {
+                val launchpad = SLRealm.findSpaceXLaunchpadByID(launchSpaceX.launchpad)
+                launches.add(
+                    Launch(
+                        launchSpaceX.name,
+                        launchSpaceX.date_local,
+                        "${launchpad?.locality}, ${launchpad?.region}",
+                        "SpaceX",
+                        launchpad?.id!!
+                    )
                 )
-            )
+            }
         }
+    }
+
+    private fun isDataCorrect(launchSpaceX: SpaceXSchedule): Boolean {
+
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+
+        try {
+            val parsed = dateFormat.parse(launchSpaceX.date_local)
+            return parsed!!.after(Date())
+        } catch (pe: ParseException) {
+            pe.printStackTrace()
+        }
+
+        return false
     }
 }
