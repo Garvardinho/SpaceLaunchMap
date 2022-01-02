@@ -1,18 +1,15 @@
 package com.spacelaunchmapandroid.spacelaunchmap.flow.launches.ui
 
 import android.os.Bundle
-import android.text.Html
-import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.spacelaunchmapandroid.spacelaunchmap.MainActivity
 import com.spacelaunchmapandroid.spacelaunchmap.R
+import com.spacelaunchmapandroid.spacelaunchmap.core.database.SLRealm
 import com.spacelaunchmapandroid.spacelaunchmap.service.spacex.model.managed.SpaceXLaunchpadManaged
 import com.spacelaunchmapandroid.spacelaunchmap.service.spacex.model.managed.SpaceXScheduleManaged
-import io.realm.kotlin.where
 
 private const val LAUNCH_TITLE = "LaunchDetailsFragment.launchTitle"
 
@@ -26,8 +23,7 @@ class LaunchDetailsFragment : Fragment() {
         arguments?.let {
             launchTitle = it.getString(LAUNCH_TITLE)
         }
-        launch = MainActivity.getRealmInstance()
-            .where<SpaceXScheduleManaged>().equalTo("name", launchTitle).findFirst()
+        launch = SLRealm.findSpaceXLaunchByName(launchTitle)
     }
 
     override fun onCreateView(
@@ -45,12 +41,11 @@ class LaunchDetailsFragment : Fragment() {
         val launchLaunchpad: TextView = view.findViewById(R.id.launch_launchpad)
         val launchLocation: TextView = view.findViewById(R.id.launch_location)
         val launchDetails: TextView = view.findViewById(R.id.launch_details)
+        val launchpad: SpaceXLaunchpadManaged? = SLRealm.findSpaceXLaunchpadByID(launch?.launchpad)
 
         launchTitleTextView.text = launch?.name
         launchDate.text = getString(R.string.date, launch?.date_local?.subSequence(0, 10))
         launchCompany.text = getString(R.string.spacex)
-        val launchpad = MainActivity.getRealmInstance()
-            .where<SpaceXLaunchpadManaged>().equalTo("id", launch?.launchpad).findFirst()
         launchLocation.text = getString(R.string.location, launchpad?.locality, launchpad?.region)
         launchLaunchpad.text = getString(R.string.launchpad, launchpad?.name)
 
