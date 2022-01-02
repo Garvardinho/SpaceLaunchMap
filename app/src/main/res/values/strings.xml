@@ -5,6 +5,7 @@
     <string name="launch_info">Launch info</string>
     <string name="spacex">Company: SpaceX</string>
     <string name="date">Date: %1$s</string>
+    <string name="launchpad">Launchpad: %1$s</string>
     <string name="location">Location: %1$s, %2$s</string>
     <string name="details">Details: %1$s</string>
     <string name="details_button">Details</string>

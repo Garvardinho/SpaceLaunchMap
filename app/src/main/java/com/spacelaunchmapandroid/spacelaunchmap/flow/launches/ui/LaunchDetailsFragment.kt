@@ -6,11 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.spacelaunchmapandroid.spacelaunchmap.MainActivity
 import com.spacelaunchmapandroid.spacelaunchmap.R
+import com.spacelaunchmapandroid.spacelaunchmap.core.database.SLRealm
 import com.spacelaunchmapandroid.spacelaunchmap.service.spacex.model.managed.SpaceXLaunchpadManaged
 import com.spacelaunchmapandroid.spacelaunchmap.service.spacex.model.managed.SpaceXScheduleManaged
-import io.realm.kotlin.where
 
 private const val LAUNCH_TITLE = "LaunchDetailsFragment.launchTitle"
 
@@ -24,8 +23,7 @@ class LaunchDetailsFragment : Fragment() {
         arguments?.let {
             launchTitle = it.getString(LAUNCH_TITLE)
         }
-        launch = MainActivity.getRealmInstance()
-            .where<SpaceXScheduleManaged>().equalTo("name", launchTitle).findFirst()
+        launch = SLRealm.findSpaceXLaunchByName(launchTitle)
     }
 
     override fun onCreateView(
@@ -40,20 +38,21 @@ class LaunchDetailsFragment : Fragment() {
         val launchTitleTextView: TextView = view.findViewById(R.id.launch_title)
         val launchDate: TextView = view.findViewById(R.id.launch_date)
         val launchCompany: TextView = view.findViewById(R.id.launch_company)
+        val launchLaunchpad: TextView = view.findViewById(R.id.launch_launchpad)
         val launchLocation: TextView = view.findViewById(R.id.launch_location)
         val launchDetails: TextView = view.findViewById(R.id.launch_details)
+        val launchpad: SpaceXLaunchpadManaged? = SLRealm.findSpaceXLaunchpadByID(launch?.launchpad)
 
         launchTitleTextView.text = launch?.name
         launchDate.text = getString(R.string.date, launch?.date_local?.subSequence(0, 10))
         launchCompany.text = getString(R.string.spacex)
-        val launchpad = MainActivity.getRealmInstance()
-            .where<SpaceXLaunchpadManaged>().equalTo("id", launch?.launchpad).findFirst()
-        launchLocation.text = getString(R.string.location, launchpad?.locality, launchpad?.locality)
+        launchLocation.text = getString(R.string.location, launchpad?.locality, launchpad?.region)
+        launchLaunchpad.text = getString(R.string.launchpad, launchpad?.name)
 
         if (launch?.details != null)
             launchDetails.text = getString(R.string.details, launch?.details)
         else
-            launchDetails.text = getString(R.string.details, "none")
+            launchDetails.text = getString(R.string.details, "No details available yet.")
 
     }
 
