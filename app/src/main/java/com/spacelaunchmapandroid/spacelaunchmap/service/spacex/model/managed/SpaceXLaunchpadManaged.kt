@@ -1,8 +1,10 @@
 package com.spacelaunchmapandroid.spacelaunchmap.service.spacex.model.managed
 
 import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 
 open class SpaceXLaunchpadManaged(
+    @PrimaryKey
     var id: String? = null,
     var name: String? = null,
     var locality: String? = null,
