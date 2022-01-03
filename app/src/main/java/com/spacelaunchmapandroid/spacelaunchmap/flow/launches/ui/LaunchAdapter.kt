@@ -50,7 +50,7 @@ class LaunchAdapter(private val launchList: LaunchListSource) :
             val launchpad = SLRealm.findSpaceXLaunchpadByID(launch.launchpad)
             launchTitle.text = launch.title
             launchDate.text = launch.date.subSequence(0, 10)
-            launchLaunchpad.text = launchpad?.name
+            launchLaunchpad.text = launchpad.name
             launchLocation.text = launch.location
             launchCompany.text = launch.company
         }

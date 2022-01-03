@@ -60,9 +60,9 @@ class LaunchesPresenter(private val launchesFragment: SLLaunchesFragment) :
                     Launch(
                         launchSpaceX.name,
                         launchSpaceX.date_local,
-                        "${launchpad?.locality}, ${launchpad?.region}",
+                        "${launchpad.locality}, ${launchpad.region}",
                         "SpaceX",
-                        launchpad?.id!!
+                        launchpad.id!!
                     )
                 )
             }
