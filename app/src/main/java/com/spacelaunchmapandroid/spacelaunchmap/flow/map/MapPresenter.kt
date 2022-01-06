@@ -3,9 +3,7 @@ package com.spacelaunchmapandroid.spacelaunchmap.flow.map
 import com.spacelaunchmapandroid.spacelaunchmap.core.database.SLRealm
 import com.spacelaunchmapandroid.spacelaunchmap.core.network.retrofit.common.Common
 import com.spacelaunchmapandroid.spacelaunchmap.service.spacex.model.SpaceXLaunchpad
-import com.spacelaunchmapandroid.spacelaunchmap.service.spacex.model.managed.SpaceXLaunchpadManaged
 import com.yandex.mapkit.geometry.Point
-import io.realm.Realm
 import retrofit2.Call
 import retrofit2.Response
 

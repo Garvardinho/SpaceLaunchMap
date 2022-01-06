@@ -56,13 +56,13 @@ object SLRealm {
         }
     }
 
-    fun findSpaceXLaunchByName(name: String?): SpaceXScheduleManaged? {
+    fun findSpaceXLaunchByName(name: String?): SpaceXScheduleManaged {
         return Realm.getDefaultInstance()
-            .where<SpaceXScheduleManaged>().equalTo("name", name).findFirst()
+            .where<SpaceXScheduleManaged>().equalTo("name", name).findFirst()!!
     }
 
-    fun findSpaceXLaunchpadByID(id: String?): SpaceXLaunchpadManaged? {
+    fun findSpaceXLaunchpadByID(id: String?): SpaceXLaunchpadManaged {
         return Realm.getDefaultInstance()
-            .where<SpaceXLaunchpadManaged>().equalTo("id", id).findFirst()
+            .where<SpaceXLaunchpadManaged>().equalTo("id", id).findFirst()!!
     }
 }

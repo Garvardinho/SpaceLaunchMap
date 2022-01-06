@@ -42,7 +42,7 @@ class LaunchesPresenter(private val launchesFragment: SLLaunchesFragment) :
                 dataSpaceX = response.body()
                 SLRealm.saveSpaceXLaunchesInRealm(dataSpaceX)
                 initLaunchList(dataSpaceX)
-                launchesFragment.initList()
+                launchesFragment.initList(null)
             }
 
             override fun onFailure(call: Call<List<SpaceXSchedule>>, t: Throwable) {
@@ -60,9 +60,9 @@ class LaunchesPresenter(private val launchesFragment: SLLaunchesFragment) :
                     Launch(
                         launchSpaceX.name,
                         launchSpaceX.date_local,
-                        "${launchpad?.locality}, ${launchpad?.region}",
+                        "${launchpad.locality}, ${launchpad.region}",
                         "SpaceX",
-                        launchpad?.id!!
+                        launchpad.id!!
                     )
                 )
             }

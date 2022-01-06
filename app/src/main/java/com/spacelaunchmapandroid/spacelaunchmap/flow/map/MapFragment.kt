@@ -7,9 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentTransaction
 import com.spacelaunchmapandroid.spacelaunchmap.R
+import com.spacelaunchmapandroid.spacelaunchmap.core.database.SLRealm
+import com.spacelaunchmapandroid.spacelaunchmap.flow.launches.ui.LaunchesFragment
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
@@ -18,10 +20,23 @@ import com.yandex.mapkit.mapview.MapView
 import com.yandex.runtime.image.ImageProvider
 import com.yandex.runtime.ui_view.ViewProvider
 
+private const val LAUNCHPAD_TITLE = "MapFragment.launchpadTitle"
+
 class MapFragment : Fragment(), SLMapView {
 
     private lateinit var mapView: MapView
     private lateinit var presenter: SLMapControllerOutput
+    private var launchpadID: String? = null
+
+    companion object {
+        @JvmStatic
+        fun newInstance(launchpadTitle: String) =
+            MapFragment().apply {
+                arguments = Bundle().apply {
+                    putString(LAUNCHPAD_TITLE, launchpadTitle)
+                }
+            }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,10 +57,18 @@ class MapFragment : Fragment(), SLMapView {
 
         mapView = view.findViewById(R.id.map_view)
         mapView.map.move(
-            CameraPosition(Point(41.850033, -87.6500523), 4.0f, 0.0f, 0.0f),
+            CameraPosition(
+                Point(41.850033, -87.6500523),
+                4.0f,
+                0.0f,
+                0.0f),
             Animation(Animation.Type.SMOOTH, 0f),
             null
         )
+        arguments?.let {
+            launchpadID = it.getString(LAUNCHPAD_TITLE)
+            showLaunchpad()
+        }
     }
 
     override fun onStart() {
@@ -70,9 +93,6 @@ class MapFragment : Fragment(), SLMapView {
             val launchpadTitle: Button = launchpadInfoPanel.findViewById(R.id.launchpad_title)
             launchpadTitle.paintFlags = Paint.UNDERLINE_TEXT_FLAG
             launchpadTitle.text = title
-            launchpadTitle.setOnClickListener {
-                Toast.makeText(context, "haha", Toast.LENGTH_SHORT).show()
-            }
 
             val placemark = mapView.map.mapObjects.addPlacemark(point, ImageProvider.
                 fromResource(requireContext(), R.drawable.rocket))
@@ -87,10 +107,30 @@ class MapFragment : Fragment(), SLMapView {
             }
 
             infopanelMapObject.addTapListener { _, _ ->
-                placemark.isVisible = true
-                infopanelMapObject.isVisible = false
+                requireActivity().supportFragmentManager
+                    .beginTransaction()
+                    .replace(
+                        R.id.main_fragment,
+                        LaunchesFragment.newInstance(title))
+                    .addToBackStack(null)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit()
                 true
             }
         }
+    }
+
+    private fun showLaunchpad() {
+        val launchpad = SLRealm.findSpaceXLaunchpadByID(launchpadID)
+
+        mapView.map.move(
+            CameraPosition(
+                Point(launchpad.latitude, launchpad.longitude),
+                13.0f,
+                0.0f,
+                0.0f),
+            Animation(Animation.Type.SMOOTH, 0f),
+            null
+        )
     }
 }

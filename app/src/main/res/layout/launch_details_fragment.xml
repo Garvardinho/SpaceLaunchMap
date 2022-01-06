@@ -54,4 +54,11 @@
         android:layout_margin="8dp"
         android:textAppearance="?attr/textAppearanceBody1"
         android:textColor="?colorOnSecondary" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/go_on_the_map"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/go_on_the_map" />
 </LinearLayout>
