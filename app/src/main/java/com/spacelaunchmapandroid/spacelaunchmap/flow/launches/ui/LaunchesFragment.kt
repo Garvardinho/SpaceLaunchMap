@@ -16,14 +16,31 @@ import com.spacelaunchmapandroid.spacelaunchmap.flow.launches.data.LaunchListSou
 import com.spacelaunchmapandroid.spacelaunchmap.flow.launches.data.LaunchListSourceAdapter
 import com.spacelaunchmapandroid.spacelaunchmap.flow.launches.data.SLLaunchesFragment
 
+private const val LAUNCHPAD_TITLE_TO_SORT = "LaunchesFragment.launchpadTitleToSort"
+
 class LaunchesFragment : Fragment(), SLLaunchesFragment {
 
     private lateinit var recyclerView: RecyclerView
-    val data: LaunchListSource = LaunchListSourceAdapter(this)
+    private lateinit var data: LaunchListSource
+    private var launchpadTitleToSort: String? = null
+
+    companion object {
+        @JvmStatic
+        fun newInstance(launchpadTitleToSort: String) =
+            LaunchesFragment().apply {
+                arguments = Bundle().apply {
+                    putString(LAUNCHPAD_TITLE_TO_SORT, launchpadTitleToSort)
+                }
+            }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (requireActivity() as AppCompatActivity).supportActionBar?.show()
+        arguments?.let {
+            launchpadTitleToSort = it.getString(LAUNCHPAD_TITLE_TO_SORT)
+        }
+        data = LaunchListSourceAdapter(this)
         setHasOptionsMenu(true)
     }
 
@@ -33,8 +50,7 @@ class LaunchesFragment : Fragment(), SLLaunchesFragment {
     ): View {
         val view: View = inflater.inflate(R.layout.fragment_launches, container, false)
         recyclerView = view.findViewById(R.id.launches)
-
-        initList(null)
+        initList(launchpadTitleToSort)
         return view
     }
 
@@ -54,7 +70,6 @@ class LaunchesFragment : Fragment(), SLLaunchesFragment {
 
         if (stringToSort != null) {
             recyclerView.adapter?.notifyDataSetChanged()
-
         }
 
         adapter.setOnItemClickListener(object : LaunchAdapter.OnMoreInfoButtonClickListener {

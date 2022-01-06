@@ -21,9 +21,9 @@ class LaunchListSourceAdapter(launchesFragment: SLLaunchesFragment) : LaunchList
         val newDataSource: ArrayList<Launch> = ArrayList()
 
         for (launch in dataSource) {
-            if (launch.title.lowercase().contains(stringToSort) ||
+            if (launch.title.lowercase().contains(stringToSort.lowercase()) ||
                 SLRealm.findSpaceXLaunchpadByID(launch.launchpad)
-                    .name?.lowercase()?.contains(stringToSort) == true)
+                    .name?.lowercase()?.contains(stringToSort.lowercase()) == true)
                 newDataSource.add(launch)
         }
 

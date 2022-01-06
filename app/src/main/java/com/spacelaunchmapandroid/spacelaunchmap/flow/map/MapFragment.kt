@@ -7,10 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentTransaction
 import com.spacelaunchmapandroid.spacelaunchmap.R
 import com.spacelaunchmapandroid.spacelaunchmap.core.database.SLRealm
+import com.spacelaunchmapandroid.spacelaunchmap.flow.launches.ui.LaunchesFragment
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
@@ -92,9 +93,6 @@ class MapFragment : Fragment(), SLMapView {
             val launchpadTitle: Button = launchpadInfoPanel.findViewById(R.id.launchpad_title)
             launchpadTitle.paintFlags = Paint.UNDERLINE_TEXT_FLAG
             launchpadTitle.text = title
-            launchpadTitle.setOnClickListener {
-                Toast.makeText(context, "haha", Toast.LENGTH_SHORT).show()
-            }
 
             val placemark = mapView.map.mapObjects.addPlacemark(point, ImageProvider.
                 fromResource(requireContext(), R.drawable.rocket))
@@ -109,8 +107,14 @@ class MapFragment : Fragment(), SLMapView {
             }
 
             infopanelMapObject.addTapListener { _, _ ->
-                placemark.isVisible = true
-                infopanelMapObject.isVisible = false
+                requireActivity().supportFragmentManager
+                    .beginTransaction()
+                    .replace(
+                        R.id.main_fragment,
+                        LaunchesFragment.newInstance(title))
+                    .addToBackStack(null)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit()
                 true
             }
         }
