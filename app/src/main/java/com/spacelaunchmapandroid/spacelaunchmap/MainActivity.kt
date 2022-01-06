@@ -26,6 +26,8 @@ class MainActivity : AppCompatActivity() {
             .setTransition(TRANSIT_FRAGMENT_FADE)
             .commit()
 
+        supportActionBar?.hide()
+        supportActionBar?.title = null
         initBottomNavigation()
     }
 

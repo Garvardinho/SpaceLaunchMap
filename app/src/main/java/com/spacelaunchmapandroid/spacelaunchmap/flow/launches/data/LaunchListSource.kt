@@ -5,4 +5,6 @@ interface LaunchListSource {
     fun getCardData(position: Int): Launch
 
     fun getSize(): Int
+
+    fun sortBy(stringToSort: String)
 }
