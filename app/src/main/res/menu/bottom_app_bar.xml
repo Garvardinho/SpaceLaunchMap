@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/map_screen"
+        android:icon="@drawable/ic_map"
+        android:enabled="true"
+        android:title="@string/map" />
+
+    <item
+        android:id="@+id/launches_screen"
+        android:icon="@drawable/ic_clipboard_list"
+        android:enabled="true"
+        android:title="@string/launches" />
+
+</menu>

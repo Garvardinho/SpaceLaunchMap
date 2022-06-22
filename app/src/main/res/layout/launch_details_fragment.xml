@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/launch_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:textAppearance="?attr/textAppearanceHeadline4"
+        android:textColor="?colorOnSecondary" />
+
+    <TextView
+        android:id="@+id/launch_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textAppearance="?attr/textAppearanceBody1"
+        android:textColor="?colorOnSecondary" />
+
+    <TextView
+        android:id="@+id/launch_company"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textAppearance="?attr/textAppearanceBody1"
+        android:textColor="?colorOnSecondary" />
+
+    <TextView
+        android:id="@+id/launch_launchpad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textAppearance="?attr/textAppearanceBody1"
+        android:textColor="?colorOnSecondary" />
+
+    <TextView
+        android:id="@+id/launch_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textAppearance="?attr/textAppearanceBody1"
+        android:textColor="?colorOnSecondary" />
+
+    <TextView
+        android:id="@+id/launch_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textAppearance="?attr/textAppearanceBody1"
+        android:textColor="?colorOnSecondary" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/go_on_the_map"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/go_on_the_map" />
+</LinearLayout>

@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">SpaceLaunchMap</string>
+    <string name="map">Map</string>
+    <string name="launches">Launches</string>
+    <string name="launch_info">Launch info</string>
+    <string name="spacex">Company: SpaceX</string>
+    <string name="date">Date: %1$s</string>
+    <string name="launchpad">Launchpad: %1$s</string>
+    <string name="location">Location: %1$s, %2$s</string>
+    <string name="details">Details: %1$s</string>
+    <string name="details_button">Details</string>
+    <string name="go_on_the_map">Go on the map</string>
+    <string name="search">search</string>
+    <string name="sort_string">Launch or launchpad</string>
 </resources>
